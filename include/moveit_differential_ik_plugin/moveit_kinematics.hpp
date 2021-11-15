@@ -18,8 +18,8 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "admittance_controller/ik_plugin_base.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+#include "ik_plugin_base/ik_plugin_base.hpp"
 #include "moveit/robot_model_loader/robot_model_loader.h"
 #include "moveit/robot_state/robot_state.h"
 #include "rclcpp/rclcpp.hpp"
@@ -27,7 +27,7 @@
 namespace moveit_differential_ik_plugin
 {
 
-class MoveItKinematics : public admittance_controller::IKBaseClass
+class MoveItKinematics : public ik_plugin_base::IKBaseClass
 {
 public:
   MoveItKinematics();
@@ -36,7 +36,7 @@ public:
    * \brief Create an object which takes Cartesian delta-x and converts to joint delta-theta.
    * It uses the Jacobian from MoveIt.
    */
-  bool initialize(const std::shared_ptr<rclcpp::Node> & node, const std::string & group_name);
+  bool initialize(const std::shared_ptr<rclcpp::Node> & node, const std::string & group_name) override;
 
   /**
    * \brief Convert Cartesian delta-x to joint delta-theta, using the Jacobian.
@@ -49,7 +49,7 @@ public:
   convert_cartesian_deltas_to_joint_deltas(
     std::vector<double> & delta_x_vec,
     const geometry_msgs::msg::TransformStamped & control_frame_to_ik_base,
-    std::vector<double> & delta_theta_vec);
+    std::vector<double> & delta_theta_vec) override;
 
   /**
    * \brief Convert joint delta-theta to Cartesian delta-x, using the Jacobian.
@@ -62,9 +62,9 @@ public:
   convert_joint_deltas_to_cartesian_deltas(
     std::vector<double> &  delta_theta_vec,
     const geometry_msgs::msg::TransformStamped & tf_ik_base_to_desired_cartesian_frame,
-    std::vector<double> & delta_x_vec);
+    std::vector<double> & delta_x_vec) override;
 
-  bool update_robot_state(const trajectory_msgs::msg::JointTrajectoryPoint & current_joint_state)
+  bool update_robot_state(const trajectory_msgs::msg::JointTrajectoryPoint & current_joint_state) override
   {
     if (current_joint_state.positions.size() != joint_model_group_->getVariableNames().size())
     {

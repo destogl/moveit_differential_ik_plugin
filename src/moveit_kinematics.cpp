@@ -26,8 +26,7 @@ constexpr double HARD_STOP_SINGULARITY_THRESHOLD = 120.;
 
 namespace moveit_differential_ik_plugin
 {
-MoveItKinematics::MoveItKinematics()
-: admittance_controller::IKBaseClass()
+MoveItKinematics::MoveItKinematics() : ik_plugin_base::IKBaseClass()
 {
 }
 
@@ -227,4 +226,4 @@ double MoveItKinematics::velocity_scaling_factor_for_singularity(const Eigen::Ve
 }  // namespace moveit_differential_ik_plugin
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(moveit_differential_ik_plugin::MoveItKinematics, admittance_controller::IKBaseClass)
+PLUGINLIB_EXPORT_CLASS(moveit_differential_ik_plugin::MoveItKinematics, ik_plugin_base::IKBaseClass)
