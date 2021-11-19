@@ -124,6 +124,9 @@ bool MoveItKinematics::convert_joint_deltas_to_cartesian_deltas(
   // https://github.com/ros2/geometry2/pull/406
   try
   {
+    // TODO(destogl): Try this:
+//     tf2_eigen::doTransform(delta_x, delta_x, tf_ik_base_to_desired_cartesian_frame);
+
     // 4x4 transformation matrix
     const Eigen::Isometry3d affine_transform = tf2::transformToEigen(tf_ik_base_to_desired_cartesian_frame);
 
@@ -172,8 +175,7 @@ double MoveItKinematics::velocity_scaling_factor_for_singularity(const Eigen::Ve
 
   double ini_condition = svd.singularValues()(0) / svd.singularValues()(svd.singularValues().size() - 1);
 
-  // TODO: Remove or switch to DEBUG
-  RCLCPP_INFO_STREAM_THROTTLE(node_->get_logger(), *node_->get_clock(), 50000., "Singularity condition number is " << ini_condition);
+  RCLCPP_DEBUG_STREAM_THROTTLE(node_->get_logger(), *node_->get_clock(), 50000., "Singularity condition number is " << ini_condition);
 
   // This singular vector tends to flip direction unpredictably. See R. Bro,
   // "Resolving the Sign Ambiguity in the Singular Value Decomposition".
